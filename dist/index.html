@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portfolio | Agustin Occhiuzzi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+ 
+    <style>
+        /* ── Diplomas Section ── */
+        .diplomas {
+            padding: 80px 0;
+            background: var(--bg-secondary, #f8f9fa);
+        }
+ 
+        .diplomas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+ 
+        .diploma-card {
+            background: var(--card-bg, #fff);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+ 
+        .diploma-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+        }
+ 
+        .diploma-img-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+ 
+        .diploma-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+ 
+        .diploma-card:hover .diploma-img-wrap img {
+            transform: scale(1.04);
+        }
+ 
+        .diploma-info {
+            padding: 16px 18px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+ 
+        .diploma-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            line-height: 1.35;
+            color: var(--text-primary, #111);
+        }
+ 
+        .diploma-platform {
+            font-size: 0.78rem;
+            color: var(--text-muted, #888);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+ 
+        .diploma-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 12px;
+        }
+ 
+        .diploma-btn {
+            flex: 1;
+            padding: 7px 0;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+ 
+        .diploma-btn-primary {
+            background: var(--accent, #2563eb);
+            color: #fff;
+        }
+ 
+        .diploma-btn-secondary {
+            background: transparent;
+            color: var(--accent, #2563eb);
+            border: 1px solid var(--accent, #2563eb);
+        }
+ 
+        .diploma-btn:hover { opacity: 0.82; }
+ 
+        /* ── Lightbox ── */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.82);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+ 
+        .lightbox-overlay.open {
+            display: flex;
+        }
+ 
+        .lightbox-inner {
+            position: relative;
+            max-width: 900px;
+            width: 100%;
+        }
+ 
+        .lightbox-inner img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+ 
+        .lightbox-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+ 
+        /* ── Notebooks Section ── */
+        .notebooks-banner {
+            background: linear-gradient(135deg, var(--accent, #2563eb) 0%, #7c3aed 100%);
+            border-radius: 14px;
+            padding: 32px 36px;
+            margin-top: 48px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+ 
+        .notebooks-banner-icon {
+            font-size: 2.8rem;
+            flex-shrink: 0;
+        }
+ 
+        .notebooks-banner-text {
+            flex: 1;
+            min-width: 200px;
+        }
+ 
+        .notebooks-banner-text h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+ 
+        .notebooks-banner-text p {
+            color: rgba(255,255,255,0.82);
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+ 
+        .notebooks-banner-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+ 
+        .btn-notebook {
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+ 
+        .btn-notebook-light {
+            background: #fff;
+            color: var(--accent, #2563eb);
+        }
+ 
+        .btn-notebook-outline {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+ 
+        .btn-notebook:hover { opacity: 0.85; }
+    </style>
+  <link rel="stylesheet" crossorigin href="/assets/index-BUY-K0kG.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="#inicio" class="nav-link" data-i18n="nav.home">Inicio</a></li>
+                <li><a href="#sobre-mi" class="nav-link" data-i18n="nav.about">Sobre Mí</a></li>
+                <li><a href="#proyectos" class="nav-link" data-i18n="nav.projects">Proyectos</a></li>
+                <li><a href="#tecnologias" class="nav-link" data-i18n="nav.tech">Tecnologías</a></li>
+                <li><a href="#diplomas" class="nav-link" data-i18n="nav.diplomas">Diplomas</a></li>
+                <li><a href="#contacto" class="nav-link" data-i18n="nav.contact">Contacto</a></li>
+            </ul>
+ 
+            <div class="nav-actions">
+                <span class="lang-label" data-i18n="meta.selectLanguage">Cambiar Idioma</span>
+                <button class="lang-toggle" id="langToggle" type="button" aria-label="Cambiar idioma">
+                    <span class="lang-option" data-lang="es">ES</span>
+                    <span class="lang-sep" aria-hidden="true">/</span>
+                    <span class="lang-option" data-lang="en">EN</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+ 
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span data-i18n="hero.greeting">Hola, soy</span> <span class="highlighted">Agustin Occhiuzzi</span>
+                    </h1>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">Analista en computación y estudiante avanzado de Ingeniería en Computación en Facultad de Ingeniería UDELAR</p>
+                    <div class="hero-buttons">
+                        <a href="./docs/Agustín Occhiuzzi_CV.pdf" class="btn btn-primary" id="cvDownloadBtn" download>
+                            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7,10 12,15 17,10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span data-i18n="hero.downloadCv">Descargar CV</span>
+                        </a>
+                        <a href="./docs/ReporteEscolaridad-DOC5480562(9404279).pdf" class="btn btn-secondary" download>
+                            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14,2 14,8 20,8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10,9 9,9 8,9"></polyline>
+                            </svg>
+                            <span data-i18n="hero.academicRecord">Escolaridad</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="image-container">
+                        <img src="/assets/fotocv-BTulIAv2.jpg" alt="Foto de perfil" data-i18n-attr="alt" data-i18n="hero.profilePhotoAlt">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- About Section -->
+    <section id="sobre-mi" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="about.title">Sobre Mí</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p data-i18n="about.p1">
+                        Soy estudiante avanzado de Ingeniería en Computación, actualmente terminando el quinto año de la carrera.
+                        A lo largo de mi formación académica he desarrollado una sólida base en programación, poniéndola en práctica en proyectos
+                        académicos y profesionales.
+                    </p>
+ 
+                    <p data-i18n="about.p2">
+                        Me apasiona la tecnología y tengo un fuerte interés en el desarrollo fullstack con un enfoque en robustez, claridad y
+                        experiencia de usuario. Trabajo con tecnologías modernas como React, Next.js, Node.js y Docker para construir soluciones
+                        escalables y mantenibles. Estoy abierto a explorar nuevas tecnologías, metodologías de desarrollo y todo aquello que
+                        contribuya a mejorar mi perfil técnico.
+                    </p>
+ 
+                    <p data-i18n="about.p3">
+                        Cuento con formación en Machine Learning y Data Science aplicado con Python, 
+                        con experiencia práctica en el diseño y entrenamiento de modelos supervisados y no supervisados: regresión lineal y logística, SVM,
+                        árboles de decisión, Random Forests, clustering (KMeans, DBSCAN) y redes neuronales artificiales.
+                        He trabajado en casos reales como detección de fraude bancario, clasificación de malware y detección de noticias falsas, aplicando técnicas de procesamiento de datos, construcción de pipelines, evaluación de modelos y reducción de
+                        dimensionalidad con PCA. Mi perfil como desarrollador fullstack me permite no solo construir modelos, sino integrarlos en aplicaciones web funcionales y escalables,
+                        aportando valor en todo el ciclo: desde el dato crudo hasta el producto final.
+                        Asimismo, cuento con el Cambridge First Certificate (FCE), que respalda mis conocimientos de inglés y me permite
+                        comunicarme con fluidez en entornos técnicos y profesionales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <section class="tech-section">
+        <div class="tech-logos">
+            <div class="tech-logo"><img src="/assets/UDELAR-URU-BAjKpnBq.jpg" alt="Udelar"></div>
+            <div class="tech-logo"><img src="/assets/fing-D6yA-7ph.jpg" alt="FING"></div>
+            <div class="tech-logo"><img src="/assets/cambridge-DanJ-XGB.jpg" alt="Cambridge"></div>
+            <div class="tech-logo"><img src="/assets/udemy-D6PVFTwB.png" alt="Udemy"></div>
+        </div>
+    </section>
+ 
+    <!-- Projects Section -->
+    <section id="proyectos" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="projects.title">Mis Proyectos</h2>
+                <p class="section-subtitle" data-i18n="projects.subtitle">Una selección de mis trabajos más destacados</p>
+            </div>
+            <div class="projects-grid">
+ 
+                <article class="project-card">
+                    <div class="project-image">
+                        <img src="/assets/Captura%20de%20pantalla%202025-08-01%20171017-BdhaHGk2.png" alt="TrabajoUY">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title" data-i18n="projects.trabajoUy.title">TrabajoUY</h3>
+                        <p class="project-description" data-i18n="projects.trabajoUy.desc">Plataforma digital de vinculación laboral, cuenta con página web como con aplicación de escritorio con JSwing</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java</span>
+                            <span class="tech-tag">Java Swing</span>
+                            <span class="tech-tag">HTML/CSS/JS</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/agustinocchiuzzi/tallerProgramacion" class="project-link" data-i18n="common.code">Código</a>
+                        </div>
+                    </div>
+                </article>
+ 
+                <article class="project-card">
+                    <div class="project-image">
+                        <img src="/assets/algoEvol-DqrmIzQf.png" alt="Algoritmo Evolutivo">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title" data-i18n="projects.evolutionary.title">Algoritmo Evolutivo</h3>
+                        <p class="project-description" data-i18n="projects.evolutionary.desc">Proyecto de la materia algoritmos evolutivos para planificar Asistencia a Partidos de un Mundial de Fútbol</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">JMetal</span>
+                            <span class="tech-tag">Java</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="./docs/algoritmoEvolutivo.pdf" class="project-link" download data-i18n="common.viewReport">Ver Informe</a>
+                            <a href="https://github.com/agustinocchiuzzi/algEvol" class="project-link" data-i18n="common.code">Código</a>
+                        </div>
+                    </div>
+                </article>
+ 
+                <article class="project-card">
+                    <div class="project-image">
+                        <img src="/assets/ceros2-5YR1rq4w.png" alt="Juego Prolog">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title" data-i18n="projects.prologGame.title">Juego usando Prolog</h3>
+                        <p class="project-description" data-i18n="projects.prologGame.desc">Inteligencia artificial y backend del juego de los "ceritos" usando Programación Lógica.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Prolog</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/agustinocchiuzzi/proyectoProlog" class="project-link" data-i18n="common.code">Código</a>
+                        </div>
+                    </div>
+                </article>
+ 
+                <article class="project-card">
+                    <div class="project-image">
+                        <img src="/assets/iapuy-BIDWYzE1.png" alt="IAPUy">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title" data-i18n="projects.iapuy.title">IAPUy - proyecto materia PIS</h3>
+                        <p class="project-description" data-i18n="projects.iapuy.desc">Plataforma web de gestión - en desarrollo</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React + Typescript</span>
+                            <span class="tech-tag">NextJs</span>
+                            <span class="tech-tag">Sequelize + PostgreSQL</span>
+                            <span class="tech-tag">Docker</span>
+                        </div>
+                    </div>
+                </article>
+ 
+                <article class="project-card">
+                    <div class="project-image">
+                        <img src="data:image/png;base64,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" alt="Topología de Redes">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title" data-i18n="projects.networkTopology.title">Topología de Redes</h3>
+                        <p class="project-description" data-i18n="projects.networkTopology.desc">Clientes y Servidores - Routers - Laboratorio de Redes de Computadoras</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">Python</span>
+                        </div>
+                    </div>
+                </article>
+ 
+                <article class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); display:flex; align-items:center; justify-content:center; min-height:160px;">
+                        <span style="font-size:3.5rem;" aria-hidden="true">🃏</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title" data-i18n="projects.trucoRL.title">Agente RL — Truco Uruguayo</h3>
+                        <p class="project-description" data-i18n="projects.trucoRL.desc">
+                            Agente de Reinforcement Learning entrenado para jugar al Truco Uruguayo en consola.
+                            Implementa Q-Learning con una representación de estado del juego, aprendiendo
+                            estrategias de canto, envido y juego de cartas de manera autónoma.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Reinforcement Learning</span>
+                            <span class="tech-tag">Proximal Policy Optimization</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/agustinocchiuzzi/trucoUruguayoRL" class="project-link" data-i18n="common.code">Código</a>
+                        </div>
+                    </div>
+                </article>
+ 
+            </div>
+ 
+            <!-- ── Notebooks Banner ── -->
+            <div class="notebooks-banner">
+                <div class="notebooks-banner-icon" aria-hidden="true">📓</div>
+                <div class="notebooks-banner-text">
+                    <h3 data-i18n="notebooks.title">Notebooks de ML &amp; Data Science</h3>
+                    <p data-i18n="notebooks.desc">
+                        Tengo notebooks de Jupyter con análisis exploratorios, modelos entrenados y experimentos
+                        del curso de ML/DS. Podés verlos directamente en GitHub o pedirme acceso.
+                    </p>
+                </div>
+                <div class="notebooks-banner-actions">
+                    <!-- Reemplazá la URL con tu repo de notebooks -->
+                    <a href="https://github.com/agustinocchiuzzi" class="btn-notebook btn-notebook-light" data-i18n="notebooks.btnGithub">Ver en GitHub</a>
+                    <a href="#contacto" class="btn-notebook btn-notebook-outline" data-i18n="notebooks.btnContact">Contactar</a>
+                </div>
+            </div>
+ 
+        </div>
+    </section>
+ 
+    <!-- Technologies Section -->
+    <section id="tecnologias" class="technologies">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="tech.title">Tecnologías</h2>
+                <p class="section-subtitle" data-i18n="tech.subtitle">Tecnologías y herramientas que domino</p>
+            </div>
+            <div class="tech-categories">
+                <div class="tech-category">
+                    <h3 class="category-title" data-i18n="tech.frontend">Frontend</h3>
+                    <div class="tech-list">
+                        <div class="tech-item">
+                            <span class="tech-name">React + Typescript</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 90%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Next.js</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 85%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Shadcn UI</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 88%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Java Server Pages</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 75%"></div></div>
+                        </div>
+                    </div>
+                </div>
+ 
+                <div class="tech-category">
+                    <h3 class="category-title" data-i18n="tech.backend">Backend</h3>
+                    <div class="tech-list">
+                        <div class="tech-item">
+                            <span class="tech-name">NodeJs</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 80%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">PostgreSQL</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 90%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Sequelize</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 78%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Java + Maven</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 82%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">C++</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 85%"></div></div>
+                        </div>
+                    </div>
+                </div>
+ 
+                <div class="tech-category">
+                    <h3 class="category-title" data-i18n="tech.mlds">Machine Learning &amp; Data Science</h3>
+                    <div class="tech-list">
+                        <div class="tech-item">
+                            <span class="tech-name">Python</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 85%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">scikit-learn</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 78%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Pandas &amp; NumPy</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 80%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-name">Matplotlib</span>
+                            <div class="tech-bar"><div class="tech-progress" style="width: 75%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <section class="tech-section">
+        <div class="tech-logos">
+            <div class="tech-logo"><img src="/assets/react-CQj2UL-H.png" alt="React"></div>
+            <div class="tech-logo"><img src="/assets/nodejs-BkIl_7uC.png" alt="Node.js"></div>
+            <div class="tech-logo"><img src="/assets/sequelize-BkMGKav9.png" alt="Sequelize"></div>
+            <div class="tech-logo"><img src="/assets/ts-D8pEGJZ9.png" alt="TypeScript"></div>
+            <div class="tech-logo"><img src="/assets/python-CWs16vkG.png" alt="Python"></div>
+            <div class="tech-logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAjVBMVEX///8Ab7YAarQAZrIAZbIAbbUAa7SDsdcAaLMAY7GyyuN9ptCvzeW61elLksfw+Pze6/WoxeBzp9HX5/Pp8Pdro9CKttnC2OpFhsBZlslnmsoAcrgAYLBAjcXX6fT2+/2bwN7J3u4XebuVu9slfb0/icM6gL2qxuCbvNx7rdRQjcQkfLzE3O0rg8CStdelyYpeAAAJRklEQVR4nO2c62KivBaGISdDPxEQlFG0INaqdZz7v7ydA2e101EQ2r2eP20kQF6SrKzASgwDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH40L++/Mt7nfZelGzyLZeBp32XpBg+bGQgUflNA4fcHFH5//g8UrkjGatZ3Wboh8AvcvssCfMZ8PclY20ZSJjzDLhPbvkv5CDNOMyzPmJM8QebCL80T39svnaHcYmKhsEig+Y+xpY8pPCdPLOqdPKRwjsnOeWpx7+ARhT6iJor85xb4n3lE4UJmZ3Tz3BL/Kw8o9C11lJrDdggeUJifytL4yYX+J2al95kYozIx+rtfKnqhhg/ab/XtArea8A23mrjChuR1bFpDtzb3sS9asckWfRemzuG/At/wykRojMvE2AjLhGf4ZSLJLjPlhULKhmVsFhhlrEJjRvKE8EtHVpEQ/bBIkJkRrvIEzutrwQqFJt/3qqhJWTQcftWWhkWnY8vsMuuKQpEjdl9fg151lbSkcFJRKBrqyhKszMlhAA22JYWLusL8LyaL3jW2pHBUZG6AaNKnPKM1hXY5WjSgrOcO2ZJCpxzxG/BRr/paU9gwNZUqRH3PGScW12A5Hq6yBFd+aZGQfmmRkONhnrAK/2VzoxJJ7y+uwpeCwNiUCeGXlgnhl5aJjRGUibC40I5eE8jOPWprEcefp1dbKYv6Gyz2o7Y4zj5SzK/XoNnjPOOt8EcfhSN2VZ4Y79/6HCjo9VK1BmU4TXrUZxjXm1UbMI45Iely3O/rjJj/vaj3gWZJsg+D3t/WdKaQsr5H+JxbnvKjoGPfynJQN/2Qot5nSzlRJwJNtPz7rZ/E+oan/BiUD6YKjWMnHXFIHxe9m1PWB6B8KIZUEN6csj4ASfqWVSG22hfI1n2rqnFufbigaFhfLG6+HbsbPLD46E3bzRTt+pbUID6120xpNCA7qmm3mVL8u29BF/itTi+spG89V1i06LhZA7MyGn/VmkAy0I/3t95T/xiBhkvaMadkQP52g3kb7je1+v728hnnx9sp5UnfKj7DfXjEGHwkm2091BUpH37ApfeItWGo929nXyC5vxbJbljTpVt490mk3PT6LvpX2UR3+OCcjnp/cf91gsm/vrTh0WgoIU9fZIy+/i2KMivaDt6CXuAc6Zc0UobRcngzwS/hbFPyeX+kDJF0+fL9qq8gDqeRxa9+sqaMY8ucjDbfWJ4m3iQLtCIYy6/zjMmP9BgTa0XX/3n+N7Kdf8F5tb3RcbZcLGaz49yzf7/+HG0AAAAAAPwggj/3zc6D7TeZ1TvCi57ccx6977znY4sZ/eoOV1OcR+lwIoI+4QWbpnXHNGiMQeFQAIW3AIXDARTeYvAKXd/X76kvFDqvvntdcexWjlwqdF6buRurf4M8e9D5umB7EVGGaLoMmwrd0ZuJEDPPF++x4/06YuLI6ag/MV0oTCgvoxFjb20yJG4xLT9IJVyF1IbLlIoj0cLuQpoijAgzqSgfRdZpU1XoLFdI/CwOMUzmNUfHQzg7iVsf7qVCd2eZcrelXAxmNMs9yTIF4tKr183JQmr/JZOtugrkP1a/nzEk19FlCmufnSg+ly0pnlQ/nSJmNxVuuYwBwAeVcOq50Vj96jMZc4rLI5R080Z5qSIuGMdYFUqttNYKQ7UmgXJxSP1XLqaLz1x/pcB6WRrFfk2hv1MF55F6Js4Z5bn1KgeiqtZXW9YUNxftJOrkzeuRqFusPds+7HgWfKEUuqrwOB2N7f3MlJJYmj3kCVI1t/Ds8Z+zFCPKXFF4JPI6DE91iXcqN5rtRe43mZtiO1eobj4RN08mzOykI6qAbr7Our+/46VCuSqS5V9y45EsGtfrJbbyJDzLGu04xRy7pcLNSVUwfsvCMEZYNoRp9nDsiGWxmJlCnPfLjj56yJCZ6p4xC54r9IgsSWn5xrJKLVlqR/6Hk+JIMJqFRT+Mp1hXYP4ROFC5x2VudctjrrDrDd5kFdYX46ooIalQhtCSajRMgrO9V7ZYF7GOUhhsUl2Bp+LRyEBVXo1NdJVRibN+2PWkWS5Ax7WQiQ3XCjdYLqWrZd4J8VjUTCq0XxoFodCMtNGkqFQUv4lBIq3l9MQtyFgrxB17QfFZDEMf9d9+MaVQ1lhjPyC5jw7eGIHUfhmsJhVq02ieKsV2hflks01YYUzV8hmpsPMVCrEYaFEjulW2KqFwKv5E9SOuJRS+qNolodFkXMT5UbNyVIXEM1JFPYq1Uth51Jtjqf0Ranjap1kKj6W5Wl7k5lvVd8mr0SRTKO0KZX7z54vPxm9KYcUCdUNMLhXK5rmKrymUC2n4wQjxbYU82ktTRc3C/bmx6QeaaIXd+aJZmUVZml1KLlsjhmyllNaPvIrnwXUrvVIyqZAtA8ONaHVfNtVKkdUk9Z+jUJrH5s4N71RVnjJ49dDJhCtL4+Cr6+yKEV9F+RcLSFzZ1adO0CA2nqRQVphVsxp2ZillOeuDVSxGCcoNtSZKjHzNS5VeWyhdeZ7v+vHOLhqD5jkKZYuj1Z3+HDnYEWkoZH+qGYIRz0ZIaYsu17tW/NK99Ory8O4tvxhYNc9RaHwIHWhdSFTTAF11Y9GBKC1LID0ZrT1ueFv+8qMxe5oriTq61JEhOLjs7O5soRv/kxT6skWhNLvRWHrblGtbr6YE/KjVBwtcytpL64Hz8NGt3JnNrc8Ppyq33pktkbn5JLO+CedIryV9kkJ9f0rM6eEwpcrnItnw4chZgDCDkz+HP2dL/s9z8zFTcynrNDocllxOOiy7MQOWHjzNyq8eDrPOMreKASS/n6lQbuqsBijxbJVPSQofx4/0lFgcUv/wczHBWaiATDE51mFgTBiexlsMPSkMSomV3Cx+qkIxTaruiFfd9M89V98xWJOKRZpa5UkUi9GtqdB5Y8o/0LlXlevwVDdvqZA8RaHhrol6uJRxMqn7+nOmj1CEo7qD9ftNnUTFSUj1VX9Vfw0RRIyu8nPCE85yY5ZPHB0qMjzrBas/352i6PQxv4g9d8aL9zRK32eXD3sz/SWPLLys7W7TtBZa6p6jil8QZrn35VTeTp+6R03sOLfeAznBrRcMce1I3LxA47SL61ycAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHxT/gcimJppK+5U1QAAAABJRU5ErkJggg==" alt="Docker"></div>
+            <div class="tech-logo"><img src="/assets/Java-Logo-CoAJnBkD.jpg" alt="Java"></div>
+            <div class="tech-logo"><img src="/assets/postgresql_original_wordmark_logo_icon_146392-Ci_pw_Cw.png" alt="PostgreSQL"></div>
+            <div class="tech-logo"><img src="data:image/png;base64,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" alt="C++"></div>
+            <div class="tech-logo"><img src="/assets/prolog-CcDinyO_.png" alt="Prolog"></div>
+            <div class="tech-logo"><img src="/assets/webtech-TzHuhQxb.jpg" alt="Web"></div>
+        </div>
+    </section>
+ 
+    <!-- ══════════════════════════════════════════
+         Diplomas Section
+    ══════════════════════════════════════════ -->
+    <section id="diplomas" class="diplomas">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="diplomas.title">Diplomas &amp; Certificaciones</h2>
+                <p class="section-subtitle" data-i18n="diplomas.subtitle">Cursos completados y credenciales obtenidas</p>
+            </div>
+ 
+            <div class="diplomas-grid">
+
+                <div class="diploma-card">
+                    <div class="diploma-img-wrap" onclick="openLightbox('./img/diploma-ml.jpg')" title="Ver diploma">
+                        <img src="/assets/udemy-D6PVFTwB.png" alt="Diploma ML & Data Science" style="object-fit:contain; padding:20px;">
+                    </div>
+                    <div class="diploma-info">
+                        <p class="diploma-platform">Udemy</p>
+                        <p class="diploma-title" data-i18n="diplomas.mlcourse.title">Curso completo de Hacking Ético y Ciberseguridad - Instructor : Santiago Hernández</p>
+                        <div class="diploma-actions">
+                            <a href="https://ude.my/UC-f6059689-df01-47ea-8c5c-77b8a7266fef" class="diploma-btn diploma-btn-primary" data-i18n="diplomas.verify">Verificar</a>
+                            <a href="docs/cursoCiberseguridad.pdf" class="diploma-btn diploma-btn-secondary" download data-i18n="diplomas.download">Descargar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+        <div class="lightbox-inner" onclick="event.stopPropagation()">
+            <button class="lightbox-close" onclick="closeLightbox()" aria-label="Cerrar">✕</button>
+            <img id="lightboxImg" src="" alt="Diploma">
+        </div>
+    </div>
+ 
+    <!-- Contact Section -->
+    <section id="contacto" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="contact.title">Contacto</h2>
+                <p data-i18n="contact.subtitle">Contacta conmigo, estaré encantado de poder ayudarte</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <span>agusoryt@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <span data-i18n="contact.location">Montevideo, Uruguay</span>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/agustinocchiuzzi" class="social-link">GitHub</a>
+                    <a href="https://www.linkedin.com/in/agustín-occhiuzzi-rodríguez-8a7733366" class="social-link">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p data-i18n="footer.copyright">&copy; 2025 Agustín Occhiuzzi Rodríguez.</p>
+        </div>
+    </footer>
+ 
+    <script>
+        const STORAGE_KEY_LANG = 'portfolio.lang';
+ 
+        const translations = {
+            es: {
+                meta: {
+                    title: 'Mi Portfolio | Agustin Occhiuzzi',
+                    langToggleAria: 'Cambiar idioma',
+                    selectLanguage: 'Cambiar Idioma',
+                },
+                nav: {
+                    home: 'Inicio',
+                    about: 'Sobre Mí',
+                    projects: 'Proyectos',
+                    tech: 'Tecnologías',
+                    diplomas: 'Diplomas',
+                    contact: 'Contacto',
+                },
+                hero: {
+                    greeting: 'Hola, soy',
+                    subtitle: 'Analista en computación y estudiante avanzado de Ingeniería en Computación en Facultad de Ingeniería UDELAR',
+                    downloadCv: 'Descargar CV',
+                    academicRecord: 'Escolaridad',
+                    profilePhotoAlt: 'Foto de perfil',
+                },
+                about: {
+                    title: 'Sobre Mí',
+                    p1: 'Soy estudiante avanzado de Ingeniería en Computación, actualmente terminando el quinto año de la carrera. A lo largo de mi formación académica he desarrollado una sólida base en programación, poniéndola en práctica en proyectos académicos y profesionales.',
+                    p2: 'Me apasiona la tecnología y tengo un fuerte interés en el desarrollo fullstack con un enfoque en robustez, claridad y experiencia de usuario. Trabajo con tecnologías modernas como React, Next.js, Node.js y Docker para construir soluciones escalables y mantenibles. Estoy abierto a explorar nuevas tecnologías, metodologías de desarrollo y todo aquello que contribuya a mejorar mi perfil técnico.',
+                    p3: 'Cuento con formación en Machine Learning y Data Science aplicado con Python, desarrollé mediante un curso experiencia en el diseño y entrenamiento de modelos supervisados y no supervisados: regresión lineal y logística, SVM, árboles de decisión, Random Forests, clustering (KMeans, DBSCAN) y redes neuronales artificiales. He trabajado con ejemplos de casos reales como detección de fraude bancario, clasificación de malware y detección de noticias falsas, aplicando técnicas de procesamiento de datos, construcción de pipelines, evaluación de modelos y reducción de dimensionalidad con PCA. Mi perfil como desarrollador fullstack me permite no solo construir modelos, sino integrarlos en aplicaciones web funcionales y escalables, aportando valor en todo el ciclo: desde el dato crudo hasta el producto final. Asimismo, cuento con el Cambridge First Certificate (FCE), que respalda mis conocimientos de inglés y me permite comunicarme con fluidez en entornos técnicos y profesionales.',
+                },
+                projects: {
+                    title: 'Mis Proyectos',
+                    subtitle: 'Una selección de mis trabajos más destacados',
+                    trabajoUy: {
+                        title: 'TrabajoUY',
+                        desc: 'Plataforma digital de vinculación laboral, cuenta con página web como con aplicación de escritorio con JSwing',
+                    },
+                    evolutionary: {
+                        title: 'Algoritmo Evolutivo',
+                        desc: 'Proyecto de la materia algoritmos evolutivos para planificar asistencia a partidos de un Mundial de Fútbol',
+                    },
+                    prologGame: {
+                        title: 'Juego usando Prolog',
+                        desc: 'Inteligencia artificial y backend del juego de los "ceritos" usando programación lógica.',
+                    },
+                    iapuy: {
+                        title: 'IAPUy - proyecto materia PIS',
+                        desc: 'Plataforma web de gestión',
+                    },
+                    networkTopology: {
+                        title: 'Topología de Redes',
+                        desc: 'Clientes y servidores - Routers - Laboratorio de Redes de Computadoras',
+                    },
+                    trucoRL: {
+                        title: 'Agente RL — Truco Uruguayo',
+                        desc: 'Agente de Reinforcement Learning entrenado para jugar al Truco Uruguayo en consola.',
+                    },
+                },
+                notebooks: {
+                    title: 'Notebooks de ML & Data Science',
+                    desc: 'Tengo notebooks de Jupyter con análisis exploratorios, modelos entrenados y experimentos del curso de ML/DS. Podés verlos directamente en GitHub o pedirme acceso.',
+                    btnGithub: 'Ver en GitHub',
+                    btnContact: 'Contactar',
+                },
+                tech: {
+                    title: 'Tecnologías',
+                    subtitle: 'Tecnologías y herramientas que domino',
+                    frontend: 'Frontend',
+                    backend: 'Backend',
+                    mlds: 'Machine Learning & Data Science',
+                },
+                diplomas: {
+                    title: 'Diplomas & Certificaciones',
+                    subtitle: 'Cursos completados y credenciales obtenidas',
+                    verify: 'Verificar',
+                    download: 'Descargar',
+                    mlcourse: {
+                        title: 'Curso completo de Hacking Ético y Ciberseguridad - Instructor : Santiago Hernández',
+                    },
+                },
+                contact: {
+                    title: 'Contacto',
+                    subtitle: 'Contacta conmigo, estaré encantado de poder ayudarte',
+                    location: 'Montevideo, Uruguay',
+                },
+                common: {
+                    code: 'Código',
+                    viewReport: 'Ver Informe',
+                },
+                footer: {
+                    copyright: '© 2025 Agustín Occhiuzzi Rodríguez.',
+                },
+            },
+            en: {
+                meta: {
+                    title: 'My Portfolio | Agustin Occhiuzzi',
+                    langToggleAria: 'Change language',
+                    selectLanguage: 'Change language',
+                },
+                nav: {
+                    home: 'Home',
+                    about: 'About',
+                    projects: 'Projects',
+                    tech: 'Technologies',
+                    diplomas: 'Diplomas',
+                    contact: 'Contact',
+                },
+                hero: {
+                    greeting: 'Hi, I\'m',
+                    subtitle: 'Computer Science analyst and senior Computer Engineering student at UDELAR Faculty of Engineering',
+                    downloadCv: 'Download CV',
+                    academicRecord: 'Academic record',
+                    profilePhotoAlt: 'Profile photo',
+                },
+                about: {
+                    title: 'About me',
+                    p1: 'I\'m a senior Computer Engineering student, currently finishing my fifth year of studies. Throughout my academic journey, I\'ve developed a strong foundation in programming, applying it in both academic and professional projects.',
+                    p2: 'I\'m passionate about technology and have a strong interest in full-stack development, with a focus on robustness, clarity, and user experience. I work with modern technologies such as React, Next.js, Node.js, and Docker to build scalable and maintainable solutions. I\'m open to exploring new technologies, development methodologies, and anything that helps strengthen my technical profile.',
+                    p3: 'I have training in Machine Learning and Data Science applied with Python, with an online course i\'ve obtained practical experience in the design and training of supervised and unsupervised models: linear and logistic regression, SVM, decision trees, Random Forests, clustering (KMeans, DBSCAN), and artificial neural networks. I\'ve worked on real-world cases such as credit card fraud detection, malware classification, and fake news detection, applying data processing techniques, pipeline construction, model evaluation, and dimensionality reduction with PCA. My full-stack developer profile allows me not only to build models but also to integrate them into functional and scalable web applications, adding value throughout the entire cycle: from raw data to the final product. Additionally, I hold the Cambridge First Certificate (FCE), which supports my English proficiency and enables me to communicate fluently in technical and professional environments.',
+                },
+                projects: {
+                    title: 'My Projects',
+                    subtitle: 'A selection of my most outstanding work',
+                    trabajoUy: {
+                        title: 'TrabajoUY',
+                        desc: 'A digital job-matching platform, featuring both a web app and a desktop application built with Java Swing.',
+                    },
+                    evolutionary: {
+                        title: 'Evolutionary Algorithm',
+                        desc: 'Evolutionary Algorithms course project to plan attendance to FIFA World Cup matches.',
+                    },
+                    prologGame: {
+                        title: 'Game Built with Prolog',
+                        desc: 'AI and backend for the "ceritos" game using logic programming.',
+                    },
+                    iapuy: {
+                        title: 'IAPUy - PIS course project',
+                        desc: 'Management web platform.',
+                    },
+                    networkTopology: {
+                        title: 'Network Topology',
+                        desc: 'Clients and servers - Routers - Computer Networks lab.',
+                    },
+                    trucoRL: {
+                        title: 'RL Agent — Uruguayan Truco',
+                        desc: 'Reinforcement Learning agent trained to play Uruguayan Truco in the console.',
+                    },
+                },
+                notebooks: {
+                    title: 'ML & Data Science Notebooks',
+                    desc: 'I have Jupyter notebooks with exploratory analyses, trained models, and experiments from the ML/DS course. You can view them on GitHub or reach out for access.',
+                    btnGithub: 'View on GitHub',
+                    btnContact: 'Get in touch',
+                },
+                tech: {
+                    title: 'Technologies',
+                    subtitle: 'Technologies and tools I work with',
+                    frontend: 'Frontend',
+                    backend: 'Backend',
+                    mlds: 'Machine Learning & Data Science',
+                },
+                diplomas: {
+                    title: 'Diplomas & Certifications',
+                    subtitle: 'Completed courses and obtained credentials',
+                    verify: 'Verify',
+                    download: 'Download',
+                    mlcourse: {
+                        title: 'Ethical Hacking & Cybersecurity — Santiago Hernández',
+                    },
+                },
+                contact: {
+                    title: 'Contact',
+                    subtitle: 'Get in touch — I\'ll be happy to help',
+                    location: 'Montevideo, Uruguay',
+                },
+                common: {
+                    code: 'Code',
+                    viewReport: 'View report',
+                },
+                footer: {
+                    copyright: '© 2025 Agustín Occhiuzzi Rodríguez.',
+                },
+            },
+        };
+ 
+        function getByPath(obj, path) {
+            return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+        }
+ 
+        function applyLanguage(lang) {
+            const dict = translations[lang] ?? translations.es;
+            const activeLang = translations[lang] ? lang : 'es';
+            const cvPathByLang = {
+                es: './docs/CV_Agustin_Occhiuzzi_ES.pdf',
+                en: './docs/CV_Agustin_Occhiuzzi_EN.pdf',
+            };
+ 
+            document.documentElement.lang = activeLang;
+            document.title = dict.meta.title;
+ 
+            const toggle = document.getElementById('langToggle');
+            if (toggle) {
+                toggle.setAttribute('aria-label', dict.meta.langToggleAria);
+                toggle.querySelectorAll('.lang-option').forEach(el => {
+                    el.classList.toggle('active', el.getAttribute('data-lang') === activeLang);
+                });
+            }
+ 
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const attr = el.getAttribute('data-i18n-attr');
+                const value = getByPath(dict, key);
+                if (typeof value !== 'string') return;
+                if (attr) el.setAttribute(attr, value);
+                else el.textContent = value;
+            });
+ 
+            const cvDownloadBtn = document.getElementById('cvDownloadBtn');
+            if (cvDownloadBtn) {
+                cvDownloadBtn.setAttribute('href', cvPathByLang[activeLang] || cvPathByLang.es);
+                cvDownloadBtn.setAttribute('download', activeLang === 'en' ? 'Agustin_Occhiuzzi_CV_EN.pdf' : 'Agustin_Occhiuzzi_CV_ES.pdf');
+            }
+ 
+            localStorage.setItem(STORAGE_KEY_LANG, activeLang);
+        }
+ 
+        function detectInitialLanguage() {
+            const stored = localStorage.getItem(STORAGE_KEY_LANG);
+            if (stored === 'es' || stored === 'en') return stored;
+            const navLang = (navigator.language || '').toLowerCase();
+            return navLang.startsWith('es') ? 'es' : 'en';
+        }
+ 
+        // Lightbox
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+ 
+        function closeLightbox() {
+            document.getElementById('lightboxOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+ 
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+ 
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+ 
+        // Active nav link
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                if (scrollY >= section.offsetTop - 200) current = section.getAttribute('id');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+            });
+        });
+ 
+        // Tech bars animation
+        const techBars = document.querySelectorAll('.tech-progress');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.style.animationPlayState = 'running';
+            });
+        });
+        techBars.forEach(bar => observer.observe(bar));
+ 
+        // i18n init + toggle
+        const initialLang = detectInitialLanguage();
+        applyLanguage(initialLang);
+ 
+        const langToggle = document.getElementById('langToggle');
+        if (langToggle) {
+            langToggle.addEventListener('click', () => {
+                const current = document.documentElement.lang === 'en' ? 'en' : 'es';
+                applyLanguage(current === 'es' ? 'en' : 'es');
+            });
+        }
+    </script>
+</body>
+</html>
